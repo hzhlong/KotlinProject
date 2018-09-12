@@ -1,0 +1,96 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions' // 视图绑定，可直接使用XML中ID操作该组件
+
+android {
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
+
+    defaultConfig {
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode 1
+        versionName "1.0"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // 第三方Moudle功能库
+    compile project(':PictureLibrary') // 图片选择器（PictureLibrary库和Ucrop库）
+
+    //Android Support
+    compile "com.android.support:multidex:${multidex_version}"
+    /*compile "com.android.support:support-v4:${android_support_version}"
+    compile "com.android.support:appcompat-v7:${android_support_version}"
+    compile "com.android.support:recyclerview-v7:${android_support_version}"*/
+    compile "com.android.support:cardview-v7:${android_support_version}"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    // Anko Commons
+    compile "org.jetbrains.anko:anko-commons:$anko_version"
+    // Support-v4 (only Anko Commons)
+    compile "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
+    // RxJava and RxKotlin and RxAndroid
+    compile "io.reactivex.rxjava2:rxjava:$rx_java_version"
+    compile "io.reactivex.rxjava2:rxkotlin:$rx_kotlin_version"
+    compile "io.reactivex.rxjava2:rxandroid:${rx_android_version}"
+    //Retrofit
+    compile "com.squareup.okhttp3:okhttp:${ok_http_version}"
+    compile "com.squareup.retrofit2:retrofit:${retrofit_version}"
+    compile "com.squareup.okhttp3:logging-interceptor:${ok_http_version}"
+    compile "com.squareup.retrofit2:converter-gson:${retrofit_version}"
+    compile "com.squareup.retrofit2:adapter-rxjava2:${retrofit_version}"
+    // Rxpermissions：获取权限的很方便的库【rxPermission需要rxjava配合才能使用】
+    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'
+    //Dagger2
+    compile "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    //RxLifecycle
+    compile "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rx_lifecycle_version"
+    compile "com.trello.rxlifecycle2:rxlifecycle-components:$rx_lifecycle_version"
+    //Glide
+    compile "com.github.bumptech.glide:glide:$glide_version"
+    //Circle ImageView
+    compile "de.hdodenhof:circleimageview:${circle_imageView_version}"
+    //Take Photo
+    compile "com.jph.takephoto:takephoto_library:${take_photo_version}"  // 图片选择器之一，比PictureSelector库更好用（用哪个都可以~）
+    //Alert View
+//    compile "com.bigkoo:alertview:${alert_view_version}" // IOS弹出框(由于字体无法修改问题,我直接下载源码到IOSAlertViewLibrary库中)
+    //七牛
+    compile 'com.qiniu:qiniu-android-sdk:7.3.+'
+    //底部导航
+    compile 'com.ashokvarma.android:bottom-navigation-bar:2.0.2'
+    //Banner轮播图
+    compile 'com.youth.banner:banner:1.4.10'  //最新版本
+    //标签
+    compile 'com.github.shts:TriangleLabelView:1.1.2'
+    //画廊
+    compile 'com.github.crosswall:Android-Coverflow:release-v1.0.4'
+    //MulitStateView
+    //【多状态视图：在ListView或者RecycleView中有可能加载过程中出现空数据或者加载失败等状态，需要显示不同的状态视图】
+    compile "com.github.Kennyc1012:MultiStateView:$multi_state_view_version"
+    //上下拉刷新
+    compile 'cn.bingoogolapple:bga-refreshlayout:1.1.7@aar'
+    //Kotlin Bus
+    compile 'com.eightbitlab:rxbus:1.0.2'
+    //FlowLayout
+    compile 'com.zhy:flowlayout-lib:1.0.3'
+    //ARouter 阿里巴巴出的路由框架，用于多模块操作：多模块跳转，支持添加多个拦截器等
+    compile "com.alibaba:arouter-api:$arouter_api_version"
+    //BadgeView:一个可以自由定制外观、支持拖拽消除的MaterialDesign风格Android BadgeView ：例如购物车右上角的圆圈角标
+    compile 'q.rorbin:badgeview:1.1.2'
+    // 图片查看类
+    compile 'com.github.chrisbanes:PhotoView:2.1.3'
+}
+repositories {
+    mavenCentral()
+}

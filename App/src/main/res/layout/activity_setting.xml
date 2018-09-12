@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clipToPadding="false"
+    android:fitsSystemWindows="true"
+    style="@style/MatchMatch.Vertical">
+
+    <com.kotlin.base.widgets.HeaderBar
+        style="@style/MatchWrap"
+        app:titleText="设置" />
+
+    <TextView
+        android:id="@+id/mUserProtocolTv"
+        style="@style/SettingItemStyle"
+        android:text="用户协议" />
+
+    <TextView
+        android:id="@+id/mFeedBackTv"
+        style="@style/SettingItemStyle"
+        android:text="反馈意见" />
+
+    <TextView
+        android:id="@+id/mAboutTv"
+        style="@style/SettingItemStyle"
+        android:text="关于" />
+
+    <TextView
+        android:id="@+id/mCheckVersionTv"
+        style="@style/SettingItemStyle"
+        android:text="检查版本" />
+
+    <Button
+        android:id="@+id/mLogoutBtn"
+        style="@style/FullBtnStyle"
+        android:enabled="true"
+        android:text="退出登录" />
+</LinearLayout>

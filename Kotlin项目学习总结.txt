@@ -1,0 +1,553 @@
+框架模块【与业务逻辑无关】
+
+BaseLibrary模块：基础的控件，常用操作的工具类，还有一些父类（Activity父类,Fragment父类等等）
+
+		{获取数据}     {把数据转换成实体类}        {得到实体类后进行业务逻辑处理}        {回调给ui，显示界面}
+
+
+包结构：【data包】网络层-net -》 实体层-protocol -》 【persenter包】mvp的中间层以及回调view -》 【ui包】mvp的ui层
+
+其他包结构：【common包】用来保存一些通用工具   【ext包】保存kotlin的扩展方法，提高开发效率  【rx包】业务逻辑的一些基类
+	    【widgets包】通用组件	       【injection包】dagger2注解相关的类
+
+
+
+
+   Provider模块：和业务相关的一些公用属性，像一些事件，还有多模块需要引用的一些id,key值等等，主要实现数据共享
+
+其他包结构：【common包】用来保存一些通用工具   【event包】eventBus或者rxBus传输的事件类
+	    【router包】Arouter{阿里巴巴出的跨模块通信框架}用来进行跨模块通信或者跨模块接口调用的一些类都放在这里
+
+
+
+Provider模块是依赖于BaseLibrary模块，而其他模块则是依赖于Provider模块。
+
+
+======================================================================
+
+
+业务逻辑模块【与需求相关】
+
+  GoodsCenter模块：商品列表，详情等。
+MessageCenter模块：如消息公告栏，消息推送等。
+  OrderCenter模块：订单购买，查看详情，地址新增等。
+       PaySDK模块：第三方支付，支付宝，微信，银联等。【尽量解耦】
+
+
+
+功能库模块【以moudle形式导入】
+
+IOSAlertViewLibrary模块：IOS弹出框(由于字体无法修改问题,我直接下载源码到IOSAlertViewLibrary库中)
+
+
+
+======================================================================
+
+
+
+
+提醒：模块中的service包是存放业务逻辑的。
+
+
+
+++++提问：UserCenter模块为什么要创建两个文件夹放置两个Manifest文件？
+模块化开发的时候每个人都只负责自己的模块，为了方便调试和开发，
+debug文件夹下的Manifest文件是用来作为应用程序来使用的，可以单独运行;
+release文件夹下的Manifest文件是用来作为库工程来使用的，开发完就整合到app中。
+
+提示：切换不同的Manifest文件时需要配置一个参数来判断；
+1.在gradle.properties文件中配置自定义的参数isUserModule = false
+
+2.然后在模块的build.gradle文件中加入判断当前是作为应用程序还是库工程来使用（例如UserCenter）
+if(isUserModule.toBoolean()){
+    apply plugin: 'com.android.library'
+}else{
+    apply plugin: 'com.android.application'
+}
+
+3.配置选择使用哪个Manifest文件
+android {
+
+	...
+
+	sourceSets {
+		main {
+		    if (isUserModule.toBoolean()) {
+			manifest.srcFile 'src/main/release/AndroidManifest.xml'
+		    } else {
+			manifest.srcFile 'src/main/debug/AndroidManifest.xml'
+		    }
+		}
+	}
+}
+
+4.在主模块(例如App模块)中如果需要引用UserCenter模块则先判断下UserCenter是否库工程，如果是才能将UserCenter模块作为库工程导入成功。
+dependencies {
+    ...
+    if(isUserModule.toBoolean()){
+        compile project(':UserCenter')
+    }
+}
+
+
+
+++++提问：布局中以前的组件命名一般是“组件+功能”（例如btn_register），为什么kotlin里面要用驼峰式命名？
+因为在模块中引入了apply plugin: 'kotlin-android-extensions'，也就可以直接操作布局中的定义了id的组件。
+而且google官方提供的kotlin源码中也是这样规范写的，写多了就习惯了。
+
+
+
+++++提问：.singleTop().clearTop()这种写法算不算singleTask，如果后面不加.clearTop()()方法会怎么样？
+startActivity(intentFor<LoginActivity>().singleTop())就是java的singleTop模式
+startActivity(intentFor<LoginActivity>().singleTop().clearTop())就是java的singleTask模式
+
+
+
+
+++++提问：自定义drawable类似border_bottom.xml文件。在外边添加layer-list和直接使用shape的区别在哪里？
+layer-list 的大致原理类似 RelativeLayout（或者FrameLayout），也是一层层的叠加，后添加的会覆盖先添加的。
+在 layer-list 中可以通过 控制后添加图层距离最底部图层的 左上右下的四个边距等属性，得到不同的显示效果。
+
+layer-list 中不同的图层使用 item 节点来定义。
+
+效果图：TextView 只有一个顶部边线  https://img-blog.csdn.net/20161206100146670
+
+具体代码：
+创建带有蓝色顶部边线的 layer-list 图
+在 res 目录中的 drawable 目录下，创建名称为 singleline.xml 的xml 文件，然后编辑 layer-list 的详细代码，如下：
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--底层使用蓝色填充色-->
+    <item>
+        <shape>
+            <solid android:color="#02a0ef"/>
+        </shape>
+    </item>
+
+    <!--上面一层距离底层的顶部1dp,类似marginTop,填充色为白色，这样就形成了一个带有蓝色顶部边线的白色背景的图-->
+    <item android:top="1dp">
+        <shape>
+            <solid android:color="#fff"/>
+        </shape>
+    </item>
+</layer-list>
+
+
+使用 layer-list 图，设置为textView的背景
+ <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/singleline"
+        android:gravity="center"
+        android:text="单一边线效果"/>
+
+具体可以查看：https://blog.csdn.net/north1989/article/details/53485729
+
+
+
+
+
+
+++++提问：项目中出现了MutableList，与List的区别在哪里？
+Kotlin中，明确区分了集合的只读和可变。Kotlin中的list与java没区别，
+List也就是一个只读的集合。但如果想对其进行修改，我们应该使用MutableList。
+
+
+
+++++提问：android中style.xml中定义了高度，然后再在布局中定义了高度，哪个高度会被覆盖？
+同时定义了高度，那么只会执行布局中的高度。
+
+
+
+
+++++提问：什么是SKU?
+例子：苹果，苹果有青苹果，红苹果，白苹果。每种颜色的苹果又分大苹果和小苹果两种属性。
+例如苹果-青苹果-大。这就是一个SKU。又或者苹果-白苹果-小。这也是一个SKU。
+
+
+
+++++提问：如何序列化对象或实体类
+ShipAddress实体类中的序列化可以继承Parcelable，然后实现默认方法；
+1.也可以直接下载可以在module中添加【例如：OrderCenter的build.gradle文件】
+androidExtensions { // kotlin 1.14版本后的用于序列化类所推出的扩展
+    experimental = true
+}
+如下例子：
+@SuppressLint("ParcelCreator")
+@Parcelize // 【kotlin 1.14版本 可以直接下载ktolin的序列化插件自动序列化也行 Parcelable Code Generator(for kotlin)】
+data class ShipAddress(
+        val id: Int,
+        var shipUserName: String,
+        var shipUserMobile: String,
+        var shipAddress: String,
+        var shipIsDefault: Int
+) : Parcelable
+
+
+
+
+
+++++提问：单模块与多模块MessageCenter模块如何接入极光推送？
+
+【多模块接入】
+1、在极光推送官网创建应用后并下载创建的应用Demo http://docs.jiguang.cn/jpush/client/Android/android_3m/
+2、在MessageCenter模块中build.gradle文件导入依赖库
+    compile 'cn.jiguang.sdk:jpush:3.0.9'  // 此处以JPush 3.0.9 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.1.7'  // 此处以JCore 1.1.7 版本为例。
+
+3、在MessageCenter模块中build.gradle文件拷贝官方的默认配置
+【切记：applicationId只有主工程才会有，所以不能直接写在MessageCenter模块中。而且主工程也要添加多一次极光配置来识别】
+
+   ----APP主模块中build.gradle文件
+
+   defaultConfig {
+        applicationId "com.xxx.xxx" //JPush上注册的包名.
+        ......
+
+	manifestPlaceholders = [
+	     JPUSH_PKGNAME : applicationId,  // applicationId只有主工程才会有，所以也要在主工程配置。如果是单工程则不需要在其他Moudle配置哈。
+	]
+
+        ......
+   }
+
+
+
+   ----MessageCenter模块中build.gradle文件
+
+   defaultConfig {
+        ......
+
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+            JPUSH_PKGNAME : "com.kotlin.mall", // applicationId只有主工程才会有，所以不能直接用applicationId写在MessageCenter模块中。
+            JPUSH_APPKEY : "你的appkey", //JPush上注册的包名对应的appkey.
+            JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
+        ......
+    }
+
+4、多模块开发中需要在MessageCenter模块的Manifest文件中也要配置key和管道，但是因为极光本身的Manifest文件
+   也有配置key和管道，所以需要把极光的值给替换掉，加上tools:replace="android:value"。【JPUSH_APPKEY和JPUSH_CHANNEL】
+   
+   <application android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true">
+        ......
+
+        <meta-data android:name="JPUSH_APPKEY" android:value="${JPUSH_APPKEY}"
+            tools:replace="android:value" />
+        <meta-data android:name="JPUSH_CHANNEL" android:value="${JPUSH_CHANNEL}"
+            tools:replace="android:value" />
+    </application>
+
+
+
+【单模块接入】
+在主工程的build.gradle文件配置完毕即可，主工程Manifest文件的key和管道也不用配置来替换极光的，因为
+不会与极光的模块的Manifest文件起冲突。
+
+1、在APP主模块中build.gradle文件导入依赖库
+    compile 'cn.jiguang.sdk:jpush:3.0.9'  // 此处以JPush 3.0.9 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.1.7'  // 此处以JCore 1.1.7 版本为例。
+
+2、在APP主模块中build.gradle文件拷贝官方的默认配置
+
+   ----APP主模块中build.gradle文件
+
+   defaultConfig {
+        applicationId "com.xxx.xxx" //JPush上注册的包名.
+        ......
+
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+            JPUSH_PKGNAME : applicationId, // applicationId只有主工程才会有，所以不能直接用applicationId写在MessageCenter模块中。
+            JPUSH_APPKEY : "你的appkey", //JPush上注册的包名对应的appkey.
+            JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
+        ......
+    }
+
+
+【配置后还要在Aplication中初始化推送】
+JPushInterface.setDebugMode(true) // debug模式在打包时记得设置为false，防止一些风险的发生
+JPushInterface.init(this)
+
+
+
+++++提问：Object定义和Class定义以及companion object定义
+Class定义与java无异；
+Object定义相当于java的单例，可以使用【类名.方法名】的形式直接使用。
+companion object里面定义参数，方法相当于java的静态形式的使用。
+
+
+
+
+++++提问：极光推送如何接收自定义推送消息？
+
+1.把官方的接收者配置信息拷贝过来到Manifest.xml文件中
+	<receiver
+            android:name=".receiver.MessageReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
+                <category android:name="com.kotlin.mall" />
+            </intent-filter>
+        </receiver>
+
+
+2.自定义广播接收者，然后把官方的代码拷贝过来即可。【在JPushInterface类中以EXTRA开头的key都是可以获取的。】
+// 自定义Push 接收器
+class MessageReceiver : BroadcastReceiver() {
+
+    private val TAG = "MessageReceiverReceiver"
+
+    private var nm: NotificationManager? = null
+
+    override fun onReceive(context: Context, intent: Intent) {
+        if (null == nm) {
+            nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        }
+
+        val bundle = intent.extras
+        Log.d(TAG, "onReceive - " + intent.action + ", extras: " + bundle)
+
+        if (JPushInterface.ACTION_REGISTRATION_ID == intent.action) {
+            Log.d(TAG, "JPush用户注册成功")
+
+        } else if (JPushInterface.ACTION_MESSAGE_RECEIVED == intent.action) {
+            Log.d(TAG, "接受到推送下来的自定义消息")
+            Toast.makeText(context,bundle.getString(JPushInterface.EXTRA_MESSAGE),Toast.LENGTH_SHORT).show()
+
+        } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED == intent.action) {
+            Log.d(TAG, "接受到推送下来的通知")
+
+
+        } else if (JPushInterface.ACTION_NOTIFICATION_OPENED == intent.action) {
+            Log.d(TAG, "用户点击打开了通知")
+
+
+        } else {
+            Log.d(TAG, "Unhandled intent - " + intent.action!!)
+        }
+    }
+}
+
+
+
+
+
+++++提问：ShareSDK接入以及使用
+
+[ShareSDK接入-----]
+
+【1】jar包导入
+1.MobCommons-2016.0811.1207.jar和MobTools-2016.0811.1207.jar是基础包
+2.之后是ShareSDK开头的jar包
+
+【2】ShareSDK.xml文件的导入，指明要分享的平台
+注意需要放在main目录中，与java目录同级的assets文件目录中
+
+配置关键字意思：以QQ为例
+<QQ
+AppId="1105636158"  【AppId和AppKey都是从腾讯开发平台中自己创建应用分配的，shareSDK不会帮我们创建】
+AppKey="FAifDlwFtUbl4tig"【AppId和AppKey都是从腾讯开发平台中自己创建应用分配的，shareSDK不会帮我们创建】
+Enable="true"	    【是否能用】
+Id="5"		    【Id与SortId没啥用，只要和其他分享平台的数字不一致即可】
+ShareByAppClient="true"【ShareByAppClient="true" 会优先走我们的客户端，如果没有则会走对应的网址】
+SortId="5"/>        【Id与SortId没啥用，只要和其他分享平台的数字不一致即可】
+
+
+微信还有一个字段叫BypassApproval，设置true是绕过微信验证机制，毕竟微信一定要打包才能测试，
+但开发中不可能每次都打包签名去测试。起码可以确保程序分享是没有问题的。
+
+
+【3】在AndroidManifest.xml配置相应平台与权限，这里只配置了QQ和微信
+<!-- shareSDK所需权限 -->
+<uses-permission android:name="android.permission.GET_TASKS" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+
+
+<!-- shareSDK -->
+<activity
+    android:name="com.mob.tools.MobUIShell"
+    android:configChanges="keyboardHidden|orientation|screenSize"
+    android:screenOrientation="portrait"
+    android:theme="@android:style/Theme.Translucent.NoTitleBar"
+    android:windowSoftInputMode="stateHidden|adjustResize">
+
+    <!-- QQ和QQ空间分享 QQ登录的回调必须要配置的 -->
+    <intent-filter>
+	<data android:scheme="tencent1104917113" />
+
+	<action android:name="android.intent.action.VIEW" />
+
+	<category android:name="android.intent.category.BROWSABLE" />
+	<category android:name="android.intent.category.DEFAULT" />
+    </intent-filter>
+</activity>
+<!-- 微信分享回调 -->
+<activity
+    android:name=".wxapi.WXEntryActivity"
+    android:configChanges="keyboardHidden|orientation|screenSize"
+    android:exported="true"
+    android:screenOrientation="portrait"
+    android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+
+
+【4】在微信开发平台指定的包路径下创建wxapi文件夹并拷贝shareSDK Demo的微信分享java类-》WXEntryActivity
+
+
+[ShareSDK接入-----]
+
+
+
+[ShareSDK分享使用-----]
+【1】把分享的所有代码都封装到com.kotlin.mall.ui.widgets.share包中
+
+【2】以本项目为例：在MainApplication中初始化ShareSDK，调用initShareSDK()
+
+// ShareSDK分享初始化
+private fun initShareSDK() {
+   ShareManager.initSDK(this)
+}
+
+【3】调用请看MeFragment的shareKtolin()方法
+[ShareSDK分享使用-----]
+
+
+
+
+======================================================================
+
+
+-----提示：kotlin中用来判断的关键字 kotlin用 or 和 and   java用|| 和 && 
+【由于kotlin 100%兼容java，所以在kotlin中用|| 和 && 是不会有问题的。】
+
+
+
+
+-----提示：为什么NewsFlipperView和其他自定义组件不同，要声明val rootView然后addView？
+因为NewsFlipperView没有指定父元素，父元素为null【最后一个参数】，所以要手动addView
+val rootView = View.inflate(context, R.layout.layout_news_flipper, null)
+
+而其他自定义组件，例如SkuView，则直接指定了父元素为this,即当前组件【最后一个参数】，所以不需要再手动addView
+View.inflate(context,R.layout.layout_sku_view, this)
+
+
+
+
+
+-----提示：配置签名--【此项目是多模块构成的，所以暂时想不到如何配置。在此先记录下】
+在主moudle的build.gradle里面以//----签名配置标注的。
+android{
+
+    ....
+
+    //----签名配置
+    //签名配置
+    signingConfigs {
+        release {
+            keyAlias "key0"
+            keyPassword "kotlin2018@"
+            storeFile file("kotlinhzh.jks")
+            storePassword "kotlin2018@"
+            v2SigningEnabled false
+        }
+    }
+    buildTypes {
+        //测试服
+        debug {
+            // 移除无用的resource文件
+            shrinkResources false
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        //正式服
+        release {
+            // 移除无用的resource文件
+            shrinkResources false
+            minifyEnabled false //true：启用混淆,false:不启用
+            signingConfig signingConfigs.release
+            //前一部分代表系统默认的android程序的混淆文件，该文件已经包含了基本的混淆声明，后一个文件是自己的定义混淆文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // 渠道Flavors，配置不同的渠道【用于Build Variant测试】
+    productFlavors {
+        //正式
+        _release {
+            buildConfigField("boolean", "USE_TEST", "false")
+            buildConfigField("String", "API_HOST", "\"https://www.gg1994app.com/\"")
+        }
+        //測試
+        xt_beta {
+            buildConfigField("boolean", "USE_TEST", "true")
+            buildConfigField("String", "API_HOST", "\"https://crmebook.app360.cn/\"")
+        }
+    }
+    // 批量配置渠道【打包】
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [USE_TEST_SERVER: name]
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.each { output -> // 3.x打包需要each改为all
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                File outputDirectory = new File(outputFile.parent)
+                def fileName
+                if (variant.buildType.name == "release") {
+                    fileName = "hzh_${buildPackageTime()}_${defaultConfig.versionName}.${defaultConfig.versionCode}_${variant.productFlavors[0].name}.apk"
+                } else {
+                    fileName = "hzh_${defaultConfig.versionName}.${defaultConfig.versionCode}_${variant.productFlavors[0].name}.apk"
+                }
+                output.outputFile = new File(outputDirectory, fileName)
+                // output.outputFile = new File(outputDirectory, fileName)  //2.x打包需要将outputFileName改为output.outputFile
+                // outputFileName = fileName                                //3.x打包需要将output.outputFile改为outputFileName
+            }
+        }
+    }
+    //签名配置----
+}
+
+特别注意：
+// output.outputFile = new File(outputDirectory, fileName)  //2.x打包需要将outputFileName改为output.outputFile
+// outputFileName = fileName                                //3.x打包需要将output.outputFile改为outputFileName
+
+
+
+
+
+
+RetrofitFactory的配置与自己写的MVPFrameWork是否一致
+
+
+支付宝沙箱测试账号：ggvpip3079@sandbox.com  登录和支付密码：xxxxxx
+极光账号：361689272@qq.com  密码：xxxxxx

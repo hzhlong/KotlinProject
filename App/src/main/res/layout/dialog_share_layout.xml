@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MatchWrap">
+
+    <HorizontalScrollView
+        android:id="@+id/mPopView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/mWeixinLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="13dp">
+
+                <ImageView
+                    android:id="@+id/mIvWeixin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/comui_share_weixin" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/mIvWeixin"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/share_weixin"
+                    android:textColor="@color/text_dark"
+                    android:textSize="17dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/mMomentLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="13dp">
+
+                <ImageView
+                    android:id="@+id/mIvWeixinMomentLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/comui_share_weixin_pengyou" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/mIvWeixinMomentLayout"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/share_weixin_moment"
+                    android:textColor="@color/text_dark"
+                    android:textSize="17dp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/mQQLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="13dp">
+
+                <ImageView
+                    android:id="@+id/mIvQQ"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/comui_share_qq" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/mIvQQ"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/share_qq"
+                    android:textColor="@color/text_dark"
+                    android:textSize="17dp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/mQzoneLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="13dp">
+
+                <ImageView
+                    android:id="@+id/mIvQzone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/comui_share_qqzone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/mIvQzone"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/share_qzone"
+                    android:textColor="@color/text_dark"
+                    android:textSize="17dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/mDownLoadLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="13dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/mIvDownload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/bg_download" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/mIvDownload"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/share_download"
+                    android:textColor="@color/text_dark"
+                    android:textSize="17dp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</RelativeLayout>

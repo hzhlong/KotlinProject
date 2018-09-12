@@ -1,0 +1,53 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions' // 视图绑定，可直接使用XML中ID操作该组件
+
+android {
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
+    defaultConfig {
+        applicationId "com.kotlin.mall"
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode 1
+        versionName "1.0"
+
+        multiDexEnabled true  // 设置MultiDex可用,分包
+
+        //----极光推送
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId, // applicationId只有主工程才会有，所以也要在主工程配置。如果是单工程则不需要在其他Moudle配置哈。
+        ]
+        //极光推送----
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
+
+}
+
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    compile project(':Provider')
+    if(isUserModule.toBoolean()){
+        compile project(':UserCenter')
+    }
+    compile project(':MessageCenter')
+    compile project(':GoodsCenter')
+    compile project(':OrderCenter')
+    compile project(':PaySDK')
+
+
+}
+repositories {
+    mavenCentral()
+}

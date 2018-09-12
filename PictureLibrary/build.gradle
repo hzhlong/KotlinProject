@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
+
+    defaultConfig {
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    // 第三方Moudle功能库
+    compile project(':Ucrop')
+
+    //Android Support
+    //compile "com.android.support:appcompat-v7:${android_support_version}"
+    //compile "com.android.support:recyclerview-v7:${android_support_version}"
+    //Glide
+    //compile "com.github.bumptech.glide:glide:$glide_version"
+    // RxJava and RxAndroid
+    compile "io.reactivex.rxjava2:rxjava:$rx_java_version"
+    compile "io.reactivex.rxjava2:rxandroid:${rx_android_version}"
+
+}

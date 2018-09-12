@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions' // 视图绑定，可直接使用XML中ID操作该组件
+apply plugin: 'kotlin-kapt'
+
+kapt {  // Arouter路由框架的注解配置
+    arguments {
+        arg("moduleName", project.getName())
+    }
+}
+
+android {
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
+
+    defaultConfig {
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode 1
+        versionName "1.0"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main() {
+            jniLibs.srcDirs = ['libs']  // 配置这个可以将jniLibs文件夹的库引入到libs中
+        }
+    }
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile project(':Provider')
+
+    //Dagger2注解，在Baselibrary依赖后，哪里需要跳转就哪里添加kapt注解
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
+    // Arouter注解，在Baselibrary依赖后，哪里需要跳转就哪里添加kapt注解
+    kapt "com.alibaba:arouter-compiler:$arouter_compiler_version"
+}
