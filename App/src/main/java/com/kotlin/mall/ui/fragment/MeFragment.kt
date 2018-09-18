@@ -143,11 +143,11 @@ class MeFragment : BaseFragment(), View.OnClickListener {
             }
         })
         dialog.mShareType = Platform.SHARE_IMAGE
-        dialog.mShareTitle = "慕课网"
-        dialog.mShareSiteUrl = "http://www.imooc.com"
-        dialog.mShareText = "慕课网"
-        dialog.mShareSite = "imooc"
-        dialog.mShareSiteUrl = "http://www.imooc.com"
+        dialog.mShareTitle = "Kotlin"
+        dialog.mShareSiteUrl = "https://github.com/hzhlong/KotlinProject"
+        dialog.mShareText = "Kotlin"
+        dialog.mShareSite = "hzh"
+        dialog.mShareSiteUrl = "https://github.com/hzhlong/KotlinProject"
         dialog.mSharePhoto = Environment.getExternalStorageDirectory().absolutePath + "/test2.jpg"
         dialog.showAtLocation((activity as MainActivity).contentView,Gravity.BOTTOM and Gravity.CENTER_HORIZONTAL,0,0)
     }

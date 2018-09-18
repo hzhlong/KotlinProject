@@ -4,7 +4,7 @@
     android:fillViewport="true">
 
     <LinearLayout
-        style="@style/MatchMatch.Vertical">
+        style="@style/MatchMatch.Vertical.Common">
 
         <LinearLayout
             style="@style/SearchHeaderStyle"

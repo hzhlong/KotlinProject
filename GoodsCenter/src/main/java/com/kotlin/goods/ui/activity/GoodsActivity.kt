@@ -39,8 +39,9 @@ class GoodsActivity : BaseMVPActivity<GoodsListPresenter>(), GoodsListView, BGAR
         setContentView(R.layout.activity_goods)
         initView()
         initRefreshLayout()
-        loadData()
 
+        mMultiStateView.startLoading()
+        loadData()
     }
 
     /**
@@ -64,7 +65,7 @@ class GoodsActivity : BaseMVPActivity<GoodsListPresenter>(), GoodsListView, BGAR
     private fun initRefreshLayout() {
         // 为BGARefreshLayout 设置代理
         mRefreshLayout.setDelegate(this)
-        // 设置下拉刷新和上拉加载更多的风格     参数1：应用程序上下文，参数2：是否具有上拉加载更多功能
+        // 设置下拉刷新和上拉加载更多的风格     参数1：应用程序上下文，参数2：是否具有上拉加载更多功能　
         val viewHolder = BGAStickinessRefreshViewHolder(this, true)
         viewHolder.setStickinessColor(R.color.colorRefreshColor)
         viewHolder.setRotateImage(R.mipmap.bga_refresh_stickiness)
@@ -83,7 +84,6 @@ class GoodsActivity : BaseMVPActivity<GoodsListPresenter>(), GoodsListView, BGAR
             //搜索商品类型
             mPresenter.getGoodsList(intent.getIntExtra(GoodsConstant.KEY_CATEGORY_ID,1), mCurrentPage)
         }
-        mMultiStateView.startLoading()
 
     }
 

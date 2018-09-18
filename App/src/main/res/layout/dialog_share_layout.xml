@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:paddingBottom="10dp">
+        android:paddingBottom="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,22 +20,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="13dp">
+                android:layout_marginTop="5dp">
 
                 <ImageView
                     android:id="@+id/mIvWeixin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/comui_share_weixin" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/comui_share_weixin"
+                    android:layout_centerHorizontal="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/mIvWeixin"
                     android:layout_centerHorizontal="true"
+                    android:paddingTop="5dp"
                     android:text="@string/share_weixin"
                     android:textColor="@color/text_dark"
-                    android:textSize="17dp" />
+                    android:textSize="14dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -43,22 +45,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="13dp"
-                android:layout_marginTop="13dp">
+                android:layout_marginTop="5dp">
 
                 <ImageView
                     android:id="@+id/mIvWeixinMomentLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/comui_share_weixin_pengyou" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/comui_share_weixin_pengyou"
+                    android:layout_centerHorizontal="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/mIvWeixinMomentLayout"
                     android:layout_centerHorizontal="true"
+                    android:paddingTop="5dp"
                     android:text="@string/share_weixin_moment"
                     android:textColor="@color/text_dark"
-                    android:textSize="17dp" />
+                    android:textSize="14dp" />
             </RelativeLayout>
 
 
@@ -67,22 +71,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="13dp"
-                android:layout_marginTop="13dp">
+                android:layout_marginTop="5dp">
 
                 <ImageView
                     android:id="@+id/mIvQQ"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/comui_share_qq" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/comui_share_qq"
+                    android:layout_centerHorizontal="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/mIvQQ"
                     android:layout_centerHorizontal="true"
+                    android:paddingTop="5dp"
                     android:text="@string/share_qq"
                     android:textColor="@color/text_dark"
-                    android:textSize="17dp" />
+                    android:textSize="14dp" />
             </RelativeLayout>
 
 
@@ -91,22 +97,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="13dp"
-                android:layout_marginTop="13dp">
+                android:layout_marginTop="5dp">
 
                 <ImageView
                     android:id="@+id/mIvQzone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/comui_share_qqzone" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/comui_share_qqzone"
+                    android:layout_centerHorizontal="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/mIvQzone"
                     android:layout_centerHorizontal="true"
+                    android:paddingTop="5dp"
                     android:text="@string/share_qzone"
                     android:textColor="@color/text_dark"
-                    android:textSize="17dp" />
+                    android:textSize="14dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -114,23 +122,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="13dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="5dp"
                 android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/mIvDownload"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/bg_download" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/bg_download"
+                    android:layout_centerHorizontal="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/mIvDownload"
                     android:layout_centerHorizontal="true"
+                    android:paddingTop="5dp"
                     android:text="@string/share_download"
                     android:textColor="@color/text_dark"
-                    android:textSize="17dp" />
+                    android:textSize="14dp" />
             </RelativeLayout>
         </LinearLayout>
     </HorizontalScrollView>

@@ -2,6 +2,7 @@ package com.kotlin.goods.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.layout_sku_view.view.*
  */
 class SkuView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : FrameLayout(context, attrs, defStyle) {
     private lateinit var mGoodsSku: GoodsSku
+    private var curSelectPos : Int = 0 // 当前选中的sku的postion，用于判断用户点击的是否同一sku
 
     init {
          View.inflate(context,R.layout.layout_sku_view, this)
@@ -43,8 +45,14 @@ class SkuView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
         mSkuContentView.adapter.setSelectedList(0)
 
-        mSkuContentView.setOnTagClickListener { _, _, _ ->
-            Bus.send(SkuChangedEvent())
+        mSkuContentView.setOnTagClickListener { _, position, _ ->
+            if(curSelectPos != position){
+                Bus.send(SkuChangedEvent())
+
+                curSelectPos = position
+            }else{
+                mSkuContentView.adapter.setSelectedList(setOf(position))
+            }
             true
         }
     }
