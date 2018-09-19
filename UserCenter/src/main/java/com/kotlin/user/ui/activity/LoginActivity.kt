@@ -84,6 +84,7 @@ class LoginActivity : BaseMVPActivity<LoginPresenter>(), LoginView, View.OnClick
                 startActivity<RegisterActivity>()
             }
             R.id.mLoginBtn -> {
+//                toast("${11111}")
                 mPresenter.login(mMobileEt.text.toString(), mPwdEt.text.toString(), mPushProvider?.getPushId()?:"")
             }
             R.id.mForgetPwdTv -> {
