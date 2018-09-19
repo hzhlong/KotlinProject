@@ -82,15 +82,12 @@ object DateUtils {
 
     /**
      * 使用用户格式格式化日期
-     * @param date
-     * *            日期
-     * *
-     * @param pattern
-     * *            日期格式
-     * *
+     * @param date 日期
+     * @param pattern 日期格式
      * @return
      */
-    @JvmOverloads fun format(date: Date?, pattern: String = datePattern): String {
+    @JvmOverloads
+    fun format(date: Date?, pattern: String = datePattern): String {
         var returnValue = ""
         if (date != null) {
             val df = SimpleDateFormat(pattern)
@@ -102,13 +99,8 @@ object DateUtils {
 
     /**
      * 使用用户格式提取字符串日期
-
-     * @param strDate
-     * *            日期字符串
-     * *
-     * @param pattern
-     * *            日期格式
-     * *
+     * @param strDate 日期字符串
+     * @param pattern 日期格式
      * @return
      */
     @JvmOverloads fun parse(strDate: String, pattern: String = datePattern): Date? {
@@ -125,10 +117,8 @@ object DateUtils {
 
     /**
      * 时间戳转date str
-
      */
-
-    fun convertTimeToString(time: Long, format: String): String {
+    fun convertTimeToString(time: Long, format: String = datePattern): String {
         val sdf = SimpleDateFormat(format)
         sdf.timeZone = defTimeZone
         return sdf.format(time)
@@ -137,7 +127,6 @@ object DateUtils {
     /**
      * 获取当前时间的前一天时间
      * @param cl
-     * *
      * @return
      */
     fun getBeforeDay(cl: Calendar): Calendar {
@@ -149,7 +138,6 @@ object DateUtils {
     /**
      * 获取当前时间的后一天时间
      * @param cl
-     * *
      * @return
      */
     fun getAfterDay(cl: Calendar): Calendar {

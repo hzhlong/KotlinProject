@@ -12,6 +12,8 @@ import com.kotlin.base.data.protocol.BaseResp
 import com.kotlin.base.rx.BaseFun
 import com.kotlin.base.rx.BaseFunBoolean
 import com.kotlin.base.rx.BaseSubscriber
+import com.kotlin.base.service.DownLoadImageService
+import com.kotlin.base.service.inter.ImageDownLoadCallBack
 import com.kotlin.base.utils.GlideUtils
 import com.kotlin.base.widgets.DefaultTextWatcher
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -21,6 +23,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.find
 import org.jetbrains.anko.toast
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 /**
  * Created by 何兆鸿 on 2018/4/17.
@@ -87,6 +91,14 @@ fun ImageView.loadUrl(url: String) {
     GlideUtils.loadUrlImage(context, url, this)
 }
 
+/***
+ *  ImageView下载网络图片,执行单线程列队执行
+ */
+private val singleExecutor: ExecutorService by lazy { Executors.newSingleThreadExecutor() }
+fun ImageView.onDownLoad(url: String, callBack: ImageDownLoadCallBack) {
+    singleExecutor.submit(DownLoadImageService(context,url, callBack))
+}
+
 /**
  *   多状态视图开始加载
  */
@@ -128,3 +140,5 @@ fun Activity.permitCallBack(result: Boolean,method: () -> Unit) {
         toast("请先申请权限！")
     }
 }
+
+

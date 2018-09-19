@@ -7,20 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.PopupWindow
-import android.widget.RelativeLayout
 import cn.sharesdk.framework.Platform
 import cn.sharesdk.framework.PlatformActionListener
-import com.kotlin.base.common.BaseApplication.Companion.context
 import com.kotlin.mall.R
 import kotlinx.android.synthetic.main.dialog_share_layout.view.*
-import org.jetbrains.anko.toast
 
 /**
  * 作者：何兆鸿 on 2018/4/23.
  * 学无止境~
  * desc:分享弹窗
  */
-class ShareDialog (context:Context, private var isShowDownload: Boolean = false, private var mListener: PlatformActionListener?) : PopupWindow(context), View.OnClickListener {
+class ShareDialog(context: Context, private var isShowDownload: Boolean = false, private var mListener: PlatformActionListener?) : PopupWindow(context), View.OnClickListener {
 
     //根视图
     private val mRootView: View
@@ -89,7 +86,14 @@ class ShareDialog (context:Context, private var isShowDownload: Boolean = false,
             R.id.mIvWeixinMomentLayout -> shareData(ShareManager.PlatformType.WechatMoments)
             R.id.mQQLayout -> shareData(ShareManager.PlatformType.QQ)
             R.id.mQzoneLayout -> shareData(ShareManager.PlatformType.QZone)
-            R.id.mDownLoadLayout -> context.toast("在图片预览的界面中用户可能想在这里提供保存图片的按钮，不碍事~") // 下载
+            R.id.mDownLoadLayout -> { // 下载
+//                context.toast("在图片预览的界面中用户可能想在这里提供保存图片的按钮，不碍事~")
+                imgDownLoadListener?.let {
+                    if(isShowDownload){
+                        imgDownLoadListener?.imgDownLoad()
+                    }
+                }
+            }
         }
     }
 
@@ -109,8 +113,15 @@ class ShareDialog (context:Context, private var isShowDownload: Boolean = false,
         params.url = mUrl
         mData.mPlatformType = platform
         mData.mShareParams = params
-        ShareManager.shareData(mData,mListener)
+        ShareManager.shareData(mData, mListener)
     }
 
 
+    /**
+     * 图片下载监听
+     */
+    var imgDownLoadListener: ImageDownLoadListener? = null
+    interface ImageDownLoadListener {
+        fun imgDownLoad()
+    }
 }

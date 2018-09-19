@@ -17,6 +17,12 @@
     <string name="nav_bar_user">我的</string>
 
 
+    <string name="img_path">new_imgs</string>
+    <string name="message_filesave">已保存到%1$s文件下</string>
+
+    <!-- 异常提示 -->
+    <string name="message_net">网络不可用</string>
+
     <!-- Crash日志 -->
     <string name="message_crash">程序出现异常，即将退出</string>
 </resources>

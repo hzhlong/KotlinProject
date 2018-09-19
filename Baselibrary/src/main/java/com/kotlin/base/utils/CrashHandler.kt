@@ -32,7 +32,7 @@ object CrashHandler : UncaughtExceptionHandler {
 
     fun init(context: Context) {
         mContext = context
-        filePath = CacheHandler().getCrashlogDir(mContext!!).getAbsolutePath()
+        filePath = CacheHandler.getCrashlogDir(mContext!!).getAbsolutePath()
 
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler(this)

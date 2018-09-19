@@ -11,13 +11,7 @@ import java.io.File
  * 学无止境~
  * 缓存Handler
  */
-class CacheHandler {
-
-    companion object {
-        const val CACHE_TAG = "CACHE_DATA"
-
-        val instance : CacheHandler by lazy { CacheHandler() }
-    }
+object CacheHandler {
 
     /**
      * crash日志目录
@@ -26,6 +20,19 @@ class CacheHandler {
      */
     fun getCrashlogDir(context: Context): File {
         val cacheDir = File(getCacheDir(context), "crash")
+        if (!cacheDir.exists()) {
+            cacheDir.mkdirs()
+        }
+        return cacheDir
+    }
+
+    /**
+     * new_imgs目录
+     * @param context
+     * @return
+     */
+    fun getImgSaveDir(context: Context): File {
+        val cacheDir = File(getCacheDir(context), context.getString(R.string.img_path))
         if (!cacheDir.exists()) {
             cacheDir.mkdirs()
         }

@@ -103,7 +103,7 @@ open class BaseActivity : RxAppCompatActivity() {
     val contentView: View
         get() {
             val content = find<FrameLayout>(android.R.id.content) // 记住是android最外面的android.R.id.content【这个不是定义的，是android本身的】
-            content.getChildAt(0).setBackgroundColor(R.color.colorRefreshColor)
+            content.getChildAt(0).setBackgroundColor(resources.getColor(R.color.colorRefreshColor))
             return content.getChildAt(0)
         }
 

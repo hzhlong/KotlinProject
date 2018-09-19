@@ -8,8 +8,10 @@ import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.kotlin.base.R
+import com.kotlin.base.common.BaseApplication.Companion.context
 import com.kotlin.base.utils.transformations.CropCircleTransformation
 import com.kotlin.base.utils.transformations.RoundedCornersTransformation
+import java.io.File
 
 /**
  * 作者：何兆鸿 on 2018/4/21.
@@ -167,5 +169,15 @@ object GlideUtils {
 
             Glide.with(context).load(url).apply(options).into(imageView)
         }
+    }
+
+    /**
+     * 图片下载
+     */
+    fun downLoadImage(context: Context, url: String?, width: Int = 500, height: Int = 500): File {
+        return Glide.with(context)
+                .load(url)
+                .downloadOnly(width, height)
+                .get()
     }
 }
