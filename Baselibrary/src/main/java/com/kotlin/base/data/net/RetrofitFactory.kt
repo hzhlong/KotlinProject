@@ -29,9 +29,9 @@ class RetrofitFactory private constructor() {
             chain ->
                 val request = chain.request()
                         .newBuilder()
-                        .header("Content-Type", "application/json")
-                        .header("charset", "UTF-8")
-                        .header("token", AppPrefsUtils.getString(BaseConstant.KEY_SP_TOKEN))
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("charset", "UTF-8")
+                        .addHeader("token", AppPrefsUtils.getString(BaseConstant.KEY_SP_TOKEN))
                         .build()
                 chain.proceed(request)
         }
