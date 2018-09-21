@@ -42,7 +42,6 @@ class AppManager private constructor(){
         activityStatck.clear()
     }
 
-    @SuppressLint("MissingPermission")
     // 退出应用程序
     fun exitApp(context: Context){
         finishAllActivity()

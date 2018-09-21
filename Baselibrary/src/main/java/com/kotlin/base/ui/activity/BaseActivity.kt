@@ -37,7 +37,7 @@ open class BaseActivity : RxAppCompatActivity() {
      * 初始化沉浸式
      */
     private fun initStateBar() {
-        setThemeColorId()
+        mColorId = if(getThemeColorId() == 0) mColorId else getThemeColorId()
         if(isNeedLoadStatusBar())
             loadStateBar()
     }
@@ -74,8 +74,8 @@ open class BaseActivity : RxAppCompatActivity() {
     /**
      * 如果子类使用非默认的StatusBar,就重写此方法,传入布局的id
      */
-    fun setThemeColorId(colorId: Int = R.color.common_blue) {
-        this.mColorId = colorId
+    open fun getThemeColorId() : Int {
+        return 0
     }
 
     /**
