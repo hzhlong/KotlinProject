@@ -9,6 +9,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.kotlin.base.R
 import com.kotlin.base.common.BaseApplication
 import com.kotlin.base.ext.applyPermit
+import com.kotlin.base.ext.showPhotoView
 import com.kotlin.base.injection.component.ActivityComponent
 import com.kotlin.base.injection.component.DaggerActivityComponent
 import com.kotlin.base.injection.module.ActivityModule
@@ -87,7 +88,7 @@ abstract class BaseTakePhotoActivity<T: BasePresenter<*>> : BaseActivity(), Base
      *   @param maxSelectNum 可选的图片数：默认9张
      */
     protected fun showAlertView(selectionMode:Int,maxSelectNum:Int = 9) {
-        AlertView("选择图片", null, "取消", null, arrayOf("拍照", "相册"), this,
+        /*AlertView("选择图片", null, "取消", null, array, this,
                 AlertView.Style.ActionSheet, object : OnItemClickListener {
             override fun onItemClick(o: Any?, position: Int) {
 
@@ -100,7 +101,17 @@ abstract class BaseTakePhotoActivity<T: BasePresenter<*>> : BaseActivity(), Base
                     }
                 })
             }
-        }).show()
+        }).show()*/
+
+        this.showPhotoView(arrayOf("拍照", "相册"), OnItemClickListener {
+            _, position ->
+            when (position) {
+                0 -> {
+                    takePicture(1, selectionMode = selectionMode, maxSelectNum = maxSelectNum, mediaList = mTempList)
+                }
+                1 -> takePicture(0, selectionMode = selectionMode, maxSelectNum = maxSelectNum, mediaList = mTempList)
+            }
+        })
     }
 
     /**

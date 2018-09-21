@@ -18,6 +18,8 @@ import com.kotlin.base.service.inter.ImageDownLoadCallBack
 import com.kotlin.base.utils.GlideUtils
 import com.kotlin.base.utils.RegexUtils
 import com.kotlin.base.widgets.DefaultTextWatcher
+import com.kotlin.utilslibrary.widgets.alertView.AlertView
+import com.kotlin.utilslibrary.widgets.alertView.OnItemClickListener
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.trello.rxlifecycle2.LifecycleProvider
 import io.reactivex.Observable
@@ -93,6 +95,14 @@ fun Activity.permitCallBack(result: Boolean,method: () -> Unit) {
     }
 }
 
+
+/**
+ * 显示选择图片弹出框
+ */
+fun Activity.showPhotoView(array : Array<String>, clickListener : OnItemClickListener){
+    AlertView("选择图片", null, "取消", null, array, this,
+            AlertView.Style.ActionSheet, clickListener).show()
+}
 
 
 
