@@ -29,6 +29,7 @@
                 android:textColorHint="@color/text_dark"
                 android:textColor="@color/common_black"
                 android:inputType="phone"
+                android:maxLength="11"
                 android:paddingLeft="@dimen/common_padding_small" />
 
             <View style="@style/DividerFixedWidth.MarginTopBottom" />

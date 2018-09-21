@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import com.kennyc.view.MultiStateView
 import com.kotlin.base.R
+import com.kotlin.base.common.BaseApplication
 import com.kotlin.base.data.protocol.BaseResp
 import com.kotlin.base.rx.BaseFun
 import com.kotlin.base.rx.BaseFunBoolean
@@ -15,6 +16,7 @@ import com.kotlin.base.rx.BaseSubscriber
 import com.kotlin.base.service.DownLoadImageService
 import com.kotlin.base.service.inter.ImageDownLoadCallBack
 import com.kotlin.base.utils.GlideUtils
+import com.kotlin.base.utils.RegexUtils
 import com.kotlin.base.widgets.DefaultTextWatcher
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.trello.rxlifecycle2.LifecycleProvider
@@ -57,47 +59,6 @@ fun <T> Observable<BaseResp<T>>.convertBoolean(): Observable<Boolean>{
     return this.flatMap(BaseFunBoolean())
 }
 
-/**
- * View点击事件扩展1(测试Kotlin用的)
- */
-fun View.onClick(listener:View.OnClickListener){
-    this.setOnClickListener(listener)
-}
-
-/**
- * View点击事件扩展2(函数可以当成参数来传递的)
- */
-fun View.onClick(method:() ->Unit){
-    this.setOnClickListener { method() }
-}
-
-/**
- * 扩展Button可用性（按钮是否可用）
- */
-fun Button.enable(et:EditText, method: () -> Boolean){
-    val btn = this
-
-    et.addTextChangedListener(object : DefaultTextWatcher(){
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            btn.isEnabled = method()
-        }
-    })
-}
-
-/**
- *  ImageView加载网络图片
- */
-fun ImageView.loadUrl(url: String) {
-    GlideUtils.loadUrlImage(context, url, this)
-}
-
-/***
- *  ImageView下载网络图片,执行单线程列队执行
- */
-private val singleExecutor: ExecutorService by lazy { Executors.newSingleThreadExecutor() }
-fun ImageView.onDownLoad(url: String, callBack: ImageDownLoadCallBack) {
-    singleExecutor.submit(DownLoadImageService(context,url, callBack))
-}
 
 /**
  *   多状态视图开始加载
@@ -108,15 +69,6 @@ fun MultiStateView.startLoading(){
     val animBackground = loadingView!!.find<View>(R.id.loading_anim_view).background
     (animBackground as AnimationDrawable).start()
 }
-
-/**
- *  扩展视图可见性
- */
-fun View.setVisible(visible:Boolean){
-    this.visibility = if (visible) View.VISIBLE else View.GONE
-}
-
-
 
 /**
  * 申请权限,不愧是鸿，擅长举一反三！厉害！加油！
@@ -140,5 +92,97 @@ fun Activity.permitCallBack(result: Boolean,method: () -> Unit) {
         toast("请先申请权限！")
     }
 }
+
+
+
+
+// ----------------View类型
+/**
+ * View点击事件扩展1(测试Kotlin用的)
+ */
+fun View.onClick(listener:View.OnClickListener){
+    this.setOnClickListener(listener)
+}
+
+/**
+ * View点击事件扩展2(函数可以当成参数来传递的)
+ */
+fun View.onClick(method:() ->Unit){
+    this.setOnClickListener { method() }
+}
+
+/**
+ *  扩展视图可见性
+ */
+fun View.setVisible(visible:Boolean){
+    this.visibility = if (visible) View.VISIBLE else View.GONE
+}
+// ----------------View类型
+
+
+
+// ----------------Button类型
+/**
+ * 扩展Button可用性（按钮是否可用）
+ */
+fun Button.enable(et:EditText, method: () -> Boolean){
+    val btn = this
+
+    et.addTextChangedListener(object : DefaultTextWatcher(){
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            btn.isEnabled = method()
+        }
+    })
+}
+// ----------------Button类型
+
+
+
+// ----------------ImageView类型
+/**
+ *  ImageView加载网络图片
+ */
+fun ImageView.loadUrl(url: String) {
+    GlideUtils.loadUrlImage(context, url, this)
+}
+
+/***
+ *  ImageView下载网络图片,执行单线程列队执行
+ */
+private val singleExecutor: ExecutorService by lazy { Executors.newSingleThreadExecutor() }
+fun ImageView.onDownLoad(url: String, callBack: ImageDownLoadCallBack) {
+    singleExecutor.submit(DownLoadImageService(context,url, callBack))
+}
+// ----------------ImageView类型
+
+
+
+// ----------------EditText类型
+/**
+ * 判断编辑文本内容是否手机格式
+ */
+fun EditText.isMobile(errorMsg : String = "输入的手机格式不正确") : Boolean{
+    var isMobile = RegexUtils.checkMobile(this.text.toString())
+    if(!isMobile){
+        BaseApplication.context.toast(errorMsg)
+    }
+    return isMobile
+}
+
+/**
+ * 判断编辑文本内容是否一致
+ */
+fun EditText.passConfirm(etPass:EditText , errorMsg : String = "输入的密码不一致") : Boolean{
+    var isSame = etPass.text.toString() == this.text.toString()
+    if(!isSame){
+        BaseApplication.context.toast(errorMsg)
+    }
+    return isSame
+}
+// ----------------EditText类型
+
+
+
+
 
 

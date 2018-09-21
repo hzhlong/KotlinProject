@@ -3,6 +3,7 @@ package com.kotlin.user.ui.activity
 import android.os.Bundle
 import com.kotlin.base.ext.enable
 import com.kotlin.base.ext.onClick
+import com.kotlin.base.ext.passConfirm
 import com.kotlin.base.ui.activity.BaseMVPActivity
 import com.kotlin.user.R
 import com.kotlin.user.injection.component.DaggerUserComponent
@@ -39,7 +40,7 @@ class ResetPwdActivity : BaseMVPActivity<ResetPwdPresenter>(), ResetView{
         mConfirmBtn.enable(mPwdConfirmEt, {isBtnEnable()})
 
         mConfirmBtn.onClick{
-            if (mPwdEt.text.toString() != mPwdConfirmEt.text.toString()){
+            if (!mPwdEt.passConfirm(mPwdConfirmEt)){
                 toast("密码不一致")
                 return@onClick
             }

@@ -3,7 +3,9 @@ package com.kotlin.user.ui.activity
 import android.os.Bundle
 import android.view.View
 import com.kotlin.base.ext.enable
+import com.kotlin.base.ext.isMobile
 import com.kotlin.base.ext.onClick
+import com.kotlin.base.ext.passConfirm
 import com.kotlin.base.ui.activity.BaseMVPActivity
 import com.kotlin.user.R
 import com.kotlin.user.injection.component.DaggerUserComponent
@@ -52,11 +54,15 @@ class RegisterActivity : BaseMVPActivity<RegisterPresenter>(), RegisterView, Vie
     override fun onClick(view: View) {
         when (view.id) {
             R.id.mVerifyCodeBtn -> {
-                mVerifyCodeBtn.requestSendVerifyNumber()
-                toast("发送验证成功")
+                if(mMobileEt.isMobile()){
+                    mVerifyCodeBtn.requestSendVerifyNumber()
+                    toast("发送验证成功")
+                }
             }
             R.id.mRegisterBtn -> {
-                mPresenter.register(mMobileEt.text.toString(), mPwdEt.text.toString(), mVerifyCodeEt.text.toString())
+                if(verifyInput()){
+                    mPresenter.register(mMobileEt.text.toString(), mPwdEt.text.toString(), mVerifyCodeEt.text.toString())
+                }
             }
         }
     }
@@ -67,6 +73,16 @@ class RegisterActivity : BaseMVPActivity<RegisterPresenter>(), RegisterView, Vie
                 mVerifyCodeEt.text.isNullOrEmpty().not() &&
                 mPwdEt.text.isNullOrEmpty().not() &&
                 mPwdConfirmEt.text.isNullOrEmpty().not()
+    }
+
+    // 输入内容验证
+    private fun verifyInput() : Boolean{
+        if(!mMobileEt.isMobile()) {
+            return false
+        }else if(!mPwdEt.passConfirm(mPwdConfirmEt)){
+            return false
+        }
+        return true
     }
 
 

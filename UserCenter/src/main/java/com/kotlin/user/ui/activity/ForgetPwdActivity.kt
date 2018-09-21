@@ -3,7 +3,9 @@ package com.kotlin.user.ui.activity
 import android.os.Bundle
 import android.view.View
 import com.kotlin.base.ext.enable
+import com.kotlin.base.ext.isMobile
 import com.kotlin.base.ext.onClick
+import com.kotlin.base.ext.passConfirm
 import com.kotlin.base.ui.activity.BaseMVPActivity
 import com.kotlin.user.R
 import com.kotlin.user.injection.component.DaggerUserComponent
@@ -51,8 +53,10 @@ class ForgetPwdActivity : BaseMVPActivity<ForgetPwdPresenter>(), ForgetPwdView, 
     override fun onClick(view: View) {
         when (view.id) {
             R.id.mVerifyCodeBtn -> {
-                mVerifyCodeBtn.requestSendVerifyNumber()
-                toast("发送验证成功")
+                if(verifyInput()){
+                    mVerifyCodeBtn.requestSendVerifyNumber()
+                    toast("发送验证成功")
+                }
             }
             R.id.mNextBtn -> {
                 mPresenter.forgetPwd(mMobileEt.text.toString(), mVerifyCodeEt.text.toString())
@@ -66,6 +70,13 @@ class ForgetPwdActivity : BaseMVPActivity<ForgetPwdPresenter>(), ForgetPwdView, 
                 mVerifyCodeEt.text.isNullOrEmpty().not()
     }
 
+    // 输入内容验证
+    private fun verifyInput() : Boolean{
+        if(!mMobileEt.isMobile()) {
+            return false
+        }
+        return true
+    }
 
     /**
      * 忘记密码回调
